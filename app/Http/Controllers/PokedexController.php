@@ -12,7 +12,7 @@ class PokedexController extends Controller
      */
     public function index()
     {
-        return Pokedex::all();
+        /* TODO: Run api call here to get the pokemon data and return it as json */
     }
 
     /**
@@ -34,9 +34,9 @@ class PokedexController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Pokedex $pokedex)
+    public function show(Pokedex $pokedex, $id)
     {
-        return $pokedex;
+        /* TODO: Run api call here to get the pokemon data and return it as json */
     }
 
     /**
