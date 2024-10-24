@@ -17,6 +17,9 @@
                 </span>
             </div>
         </div>
+        <div class="row my-4 text-center" v-if="filteredPokemonsList.length == 0">
+            <p>No Pokemons Found</p>
+        </div>
       </div>
     </div>
   </template>
