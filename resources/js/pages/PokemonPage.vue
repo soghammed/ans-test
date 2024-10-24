@@ -73,19 +73,16 @@
 	const isLoading = ref(true)
 	const route = useRoute()
 	const name = route.params.name
-	const id = route.query.id
 	let pokemon = {};
 	let species = null;
 
 	const getPokemonDetails = async () => {
 		try {
-			const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`)
+			const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
 			const species = await getPokemonSpecies();
 			pokemon.data = response.data;
 			pokemon.species = species.data;
 			isLoading.value = false;
-			console.log(pokemon)
-			// image, name, species, height/weight and any abilities
 		} catch (error) {
 			console.error(error)
 		}
@@ -93,9 +90,8 @@
 
 	const getPokemonSpecies = async () => {
 		try {
-			const response = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${id}`)
+			const response = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${name}`)
 			return response;
-			// image, name, species, height/weight and any abilities
 		} catch (error) {
 			console.error(error)
 		}
