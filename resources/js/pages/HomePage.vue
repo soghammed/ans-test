@@ -54,6 +54,7 @@ const loadPokemonPage = (pokem) => {
 }
 
 const filteredPokemonsList = computed(() => {
+    //if search is empty return all pokemons
     if(search.value === ''){
         return pokemons.value.results
     }

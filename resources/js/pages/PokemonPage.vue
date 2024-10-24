@@ -66,7 +66,7 @@
   
   <script setup>
 	import { useRoute } from 'vue-router'
-	import { defineProps, onMounted, ref, computed } from 'vue'
+	import { onMounted, ref } from 'vue'
 	import axios from 'axios'
 	import LoadingSpinner from '@/components/LoadingSpinner.vue'
 
