@@ -1,0 +1,84 @@
+<template>
+    <div class="container">
+      <div v-if="loading">
+        <LoadingSpinner />
+      </div>
+      <div class="row my-4" v-else>
+        <div class="col-lg-6 offset-lg-3">
+            <!-- <div class="hstack gap-2"> -->
+            <input type="text" class="form-control" placeholder="Search Pokemon" v-model="search" @input="searchPokemon">
+                <!-- <button v-if="search" class="btn btn-secondary">Reset</button> -->
+            <!-- </div> -->
+        </div>
+        <div class="col-lg-4" v-for="pokem in filteredPokemonsList" :key="pokem.name">
+            <div class="pokemon-container" @click="loadPokemonPage(pokem)">
+                <span class="fs-3">
+                    {{ pokem.name }}
+                </span>
+            </div>
+        </div>
+      </div>
+    </div>
+  </template>
+<script setup>
+import { ref, onMounted, computed } from 'vue'
+import axios from 'axios'
+import { useRouter } from 'vue-router'
+import LoadingSpinner from '@/components/LoadingSpinner.vue'
+
+const search = ref('')
+const pokemonList = ref(null)
+const pokemons = ref(null)
+const loading = ref(true)
+const router = useRouter()
+
+const fetchPokemon = async (url = null) => {
+    loading.value = true
+    if(url == null){
+        url = 'https://pokeapi.co/api/v2/pokemon?limit=1302'
+    }
+    try {
+        const response = await axios.get(url)
+        pokemons.value = response.data
+        pokemonList.value = response.data
+        console.log(pokemons.value)
+    } catch (error) {
+        console.error(error)
+    }
+    loading.value = false
+}
+
+const loadPokemonPage = (pokem) => {
+    //get pokemon id from url i.e (https://pokeapi.co/api/v2/pokemon/1/) the last section between the last two / is the ID
+    let sortedUrlSegments = pokem.url.split('/').filter( section => section != '' ).sort();
+    let pokemonId = !isNaN(sortedUrlSegments[0]) ? sortedUrlSegments[0] : null;
+    router.push({
+        name: 'pokedex-view',
+        params: {name: pokem.name},
+        query: {id: pokemonId},
+    })
+}
+
+const filteredPokemonsList = computed(() => {
+    if(search.value === ''){
+        console.log(pokemons.value)
+        return pokemons.value.results
+    }
+    return pokemons.value.results.filter(pokemon => {
+        return pokemon.name.toLowerCase().includes(search.value.toLowerCase())
+    })
+})
+
+onMounted(() => {
+    fetchPokemon()
+})
+</script>
+<style>
+    .pokemon-container{
+        border: 1px solid #e1e0e0;
+        padding: 10px;
+        margin: 10px;
+        cursor: pointer;
+        text-transform: capitalize;
+    }
+</style>
